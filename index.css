@@ -1,0 +1,343 @@
+/* ------- Base / Theme ------- */
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f7f7f9;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --border: #e5e7eb;
+  --code-bg: #0b1020;
+  --code-text: #e5e7eb;
+  --callout-info: #e0f2fe;
+  --callout-note: #f5f3ff;
+  --callout-success: #ecfdf5;
+  --callout-warn: #fff7ed;
+}
+:root[data-theme="dark"] {
+  --bg: #0b0e14;
+  --bg-alt: #0f1320;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #60a5fa;
+  --border: #1f2937;
+  --code-bg: #0b1020;
+  --code-text: #f3f4f6;
+  --callout-info: #07293f;
+  --callout-note: #1c1733;
+  --callout-success: #0f2a20;
+  --callout-warn: #2e2414;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font: 16px/1.65 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* ------- Layout ------- */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 1rem; }
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.site-header .brand {
+  display: flex; align-items: center; gap: .75rem; padding: .75rem 0;
+}
+.site-title { font-weight: 700; letter-spacing: .3px; }
+.site-nav { display: flex; gap: 1rem; }
+.site-nav a { color: var(--muted); text-decoration: none; padding: .75rem 0; }
+.site-nav a:hover { color: var(--text); }
+
+.theme-toggle {
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  padding: .35rem .55rem;
+  border-radius: .5rem;
+  cursor: pointer;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  max-width: 1120px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .toc { position: static; order: -1; }
+}
+
+.toc {
+  position: sticky; top: 5.5rem; align-self: start;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  border-radius: 12px;
+  padding: 1rem;
+  max-height: calc(100vh - 7rem);
+  overflow: auto;
+}
+.toc__title { margin: 0 0 .75rem; font-size: 1rem; }
+#tocList { display: flex; flex-direction: column; gap: .25rem; }
+#tocList a {
+  text-decoration: none;
+  color: var(--muted);
+  border-radius: 8px;
+  padding: .25rem .5rem;
+}
+#tocList a:hover { background: var(--bg); color: var(--text); }
+#tocList .active { background: var(--bg); color: var(--accent); }
+.toc--h2 { margin-left: 0; font-weight: 600; }
+.toc--h3 { margin-left: 1rem; font-size: .95rem; }
+
+.post { min-width: 0; }
+.post__header h1 {
+  margin: 0 0 .25rem;
+  font-size: clamp(1.8rem, 2.5vw + 1rem, 2.6rem);
+  line-height: 1.2;
+}
+.post__meta {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+.post__meta .sep { margin: 0 .5rem; color: var(--border); }
+
+.hero { margin: 1rem 0 0; }
+.hero img { width: 100%; border-radius: 14px; }
+.hero figcaption { color: var(--muted); font-size: .9rem; margin-top: .5rem; }
+
+.post h2 {
+  margin-top: 2.2rem;
+  font-size: clamp(1.35rem, 1.2vw + 1rem, 1.7rem);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: .25rem;
+}
+.post h3 { margin-top: 1.4rem; font-size: 1.125rem; }
+.post p { margin: .65rem 0; }
+.post ul, .post ol { padding-left: 1.2rem; }
+.post li { margin: .25rem 0; }
+
+/* Anchor icon on headings */
+.anchor {
+  margin-left: .4rem;
+  text-decoration: none;
+  color: var(--muted);
+  opacity: .6;
+}
+.anchor:hover { opacity: 1; color: var(--accent); }
+
+/* Callouts */
+.callout {
+  border-radius: 12px;
+  padding: .85rem 1rem;
+  margin: 1rem 0;
+  border: 1px solid var(--border);
+}
+.callout.info { background: var(--callout-info); }
+.callout.note { background: var(--callout-note); }
+.callout.success { background: var(--callout-success); }
+.callout.warn { background: var(--callout-warn); }
+
+/* Figures */
+figure { margin: 1rem 0; }
+figure img { width: 100%; border-radius: 12px; }
+figcaption { color: var(--muted); font-size: .9rem; margin-top: .35rem; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* Code blocks (if you include any) */
+pre, code, kbd, samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 1rem;
+  border-radius: 12px;
+  overflow: auto;
+  border: 1px solid var(--border);
+}
+
+/* References */
+.refs { padding-left: 1.2rem; }
+.refs li { margin: .35rem 0; }
+
+/* Footer */
+.site-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+  background: var(--bg);
+}
+.site-footer .container { padding: 1rem; color: var(--muted); }
+
+/* A11y */
+.skip-link {
+  position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;
+}
+.skip-link:focus {
+  position: static; width: auto; height: auto; padding: .5rem; background: var(--accent); color: #fff;
+}
+
+/* Print styles */
+@media print {
+  :root { --bg: #fff; --text: #000; }
+  .site-header, .site-footer, .toc, .theme-toggle, .site-nav, .anchor { display: none !important; }
+  .layout { display: block; margin: 0; padding: 0; }
+  .post h2 { border: none; }
+  a { color: inherit; text-decoration: none; }
+}
+/* ============================================= */
+/* BASE IMAGE STYLES - APPLIES TO ALL IMAGES */
+/* ============================================= */
+
+/* Target all images in main content, figure elements, and those with .responsive class */
+main img,
+.figure img,
+img.responsive {
+  display: block;            /* Treat images as block elements */
+  max-width: 55%;            /* Never wider than 90% of container */
+  width: auto;               /* Maintain original width ratio */
+  height: auto;              /* Maintain original height ratio */
+  margin: 0 auto;            /* Center horizontally */
+  object-fit: contain;       /* Show entire image without cropping */
+  border-radius: 8px;        /* Slightly rounded corners */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow */
+}
+
+/* ============================================= */
+/* FIGURE STYLES (for images with captions) */
+/* ============================================= */
+
+.figure {
+  margin: 9px 0;            /* Space above/below figure */
+  text-align: center;        /* Center all figure content */
+}
+
+.figure img {
+  max-width: 100%;            /* Limits image to 85% of container width */
+  max-height: 500px;         /* Absolute height limit (from .img-limit-lg) */
+  border-radius: 8px;        /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow */
+  display: block;            /* Treats image as block element */
+  margin: 0 auto;           /* Centers image horizontally */
+}
+
+.figure figcaption {
+  color: #666;               /* Gray caption text */
+  font-size: 14px;           /* Slightly smaller text */
+  margin-top: 8px;           /* Space between image and caption */
+  padding: 0 10%;            /* Padding to prevent long captions from stretching */
+}
+
+/* ============================================= */
+/* IMAGE SIZE LIMIT CLASSES (apply as needed) */
+/* ============================================= */
+
+/* Medium size limit - for moderately large images */
+.img-limit-md img,
+img.img-limit-md {
+  max-width: 100%;            /* 80% of container width */
+  max-height: 500px;         /* Hard pixel limit */
+}
+
+/* Large size limit - for bigger images */
+.img-limit-lg img,
+img.img-limit-lg {
+  max-width: 100%;            /* 85% of container width */
+  max-height: 600px;         /* Hard pixel limit */
+}
+
+/* Extra large size limit - for very big images */
+.img-limit-xl img,
+img.img-limit-xl {
+  max-width: 90%;            /* 90% of container width */
+  max-height: 600px;         /* Hard pixel limit */
+}
+
+/* ============================================= */
+/* GALLERY STYLES (for multiple images side-by-side) */
+/* ============================================= */
+
+.gallery-2,
+.gallery-3 {
+  display: grid;             /* Use CSS Grid for layout */
+  gap: 10px;                /* Space between images */
+  margin: 20px 0;           /* Space above/below gallery */
+}
+
+.gallery-2 {
+  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+}
+
+.gallery-3 {
+  grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+}
+
+/* Gallery images should be smaller than standalone images */
+.gallery-2 img,
+.gallery-3 img {
+  max-width: 100%;          /* Fill available column space */
+  max-height: 300px;        /* Fixed height for consistency */
+}
+
+/* ============================================= */
+/* RESPONSIVE ADJUSTMENTS (for different screen sizes) */
+/* ============================================= */
+
+/* For tablets and smaller desktops */
+@media (max-width: 1024px) {
+  .img-limit-xl img,
+  img.img-limit-xl {
+    max-height: 400px;       /* Reduce extra large images */
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  /* Make all images smaller on mobile */
+  main img,
+  .figure img,
+  img.responsive {
+    max-width: 90%;          /* Slightly wider on small screens */
+    max-height: 350px;       /* Reduced height */
+  }
+  
+  /* Stack gallery images on mobile */
+  .gallery-2,
+  .gallery-3 {
+    grid-template-columns: 1fr; /* Single column layout */
+  }
+  
+  /* Allow gallery images to be slightly taller on mobile */
+  .gallery-2 img,
+  .gallery-3 img {
+    max-height: 250px;
+  }
+}
+
+/* For very small mobile devices */
+@media (max-width: 480px) {
+  main img,
+  .figure img,
+  img.responsive {
+    max-height: 300px;       /* Even smaller on tiny screens */
+  }
+  
+  .figure figcaption {
+    font-size: 12px;         /* Smaller caption text */
+  }
+}
+
+/* ============================================= */
+/* SAFETY CATCH-ALL FOR ANY IMAGE */
+/* ============================================= */
+
+img {
+  max-width: 90%;           /* Never overflow container */
+  height: auto;              /* Maintain aspect ratio */
+}

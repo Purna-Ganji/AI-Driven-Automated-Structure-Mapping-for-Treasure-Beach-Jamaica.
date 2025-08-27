@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI-Driven Automated Structure Mapping for Flood Risk Assessment</title>
+  <meta name="description" content="Project report showcased as a blog-style article with a sticky table of contents." />
+  <meta property="og:title" content="AI-Driven Automated Structure Mapping for Flood Risk Assessment" />
+  <meta property="og:description" content="A clean, static HTML/CSS presentation of a research report." />
+  <meta property="og:type" content="article" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="brand">
+        <span class="site-title">Project Showcase</span>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">🌓</button>
+      </div>
+      <nav class="site-nav" aria-label="Site">
+        <a href="#abstract">Abstract</a>
+        <a href="#methods">Methods</a>
+        <a href="#results">Results</a>
+        <a href="#conclusion">Conclusion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content" class="layout">
+    <!-- Sticky Table of Contents -->
+    <aside class="toc" aria-label="Table of contents">
+      <h2 class="toc__title">Contents</h2>
+      <nav id="tocList"></nav>
+    </aside>
+
+    <!-- Article -->
+    <article class="post">
+      <!-- HERO / META -->
+      <header class="post__header">
+        <h1>AI-Driven Automated Structure Mapping for Flood Risk Assessment in Treasure Beach, Jamaica</h1>
+        <p class="post__meta">
+          <span class="author"> Purna Ganji , Dr.Toby Dogwiler</span>
+          <span class="sep">•</span>
+          <span class="affil">-Department  of Computer Science, -School of Earth, Environment and Sustainability, Missouri State University</span>
+          <span class="sep">•</span>
+          <time datetime="2024-11-14">November 14, 2024</time>
+        </p>
+        <!-- Optional hero image -->
+        <!-- <figure class="hero">
+          <img src="hero.jpg" alt="Study area map or project montage" />
+          <figcaption>Treasure Beach, Jamaica — study area overview.</figcaption>
+        </figure> -->
+      </header>
+
+      <!-- ABSTRACT -->
+      <section id="abstract">
+        <h2>Abstract</h2>
+        <p>This study explores the application of deep learning in ArcGIS Pro to automate the delineation of structures in Treasure Beach, Jamaica, as part of a flood risk assessment. 
+          Drone imagery was analyzed using two tools: Extract Features Using AI Models and Detect Objects Using Deep Learning. The latter tool provided better performance and allowed 
+          for more advanced parameter tuning. A hybrid model training approach was adopted using both single-class and multi-class data. Optimized parameters included a tile size of 256 and padding of 64. 
+          Among five tested models, the most accurate one detected 89.37% of actual structures while reducing false positives and false negatives. 
+          Issues such as object misclassification and over-segmentation were addressed using post-processing steps like the Dissolve Boundaries tool. 
+          Overall, the study demonstrates that deep learning can significantly improve the efficiency and accuracy of structure mapping in support of flood preparedness efforts. 
+          Drone imagery was acquired in June 2024 at Treasure Beach, Jamaica for the purpose of mapping flood risk in this community on the southern coast of Jamaica. 
+          As part of quantifying flood risk there is a need to digitize and map all the structures in the field area. Our goal was to automate the process of digitizing the structures using AI and Deep Learning tools available in ArcGIS Pro. 
+          Specifically, we investigated how to optimize various parameters in these tools to maximize the 
+            number of correctly identified structures and how accurately the perimeter of structures was mapped.</p>
+        <div class="callout info">
+          <strong>Keywords:</strong> AI, structure mapping, flood risk, remote sensing, CNN, GIS
+        </div>
+      </section>
+
+      <!-- INTRODUCTION / BACKGROUND -->
+      <section id="background">
+        <h2>Introduction</h2>
+        <p>The area of interest was outlined in red, 207 structures were mapped manually for comparison. This research addresses a subsidiary question of how to efficiently delineate all structures within the Treasure Beach community 
+          (i.e., all the structures captured on the drone imagery), which is necessary to assess the risk posed to each structure by flooding. 
+          Our primary goal in this poster is to evaluate the completeness and accuracy of Artificial Intelligence / Machine Learning tools in automating the delineation of structures and report on how best to optimize those tools 
+          to maximize completeness and accuracy.</p>
+        <figure class="figure img-limit-lg">
+          <img src="/Title Bar Letter Landscape.jpg" alt="Detected structures within AOI">
+          <figcaption>Treasure Beach in Jamaica(In-set Map)</figcaption>
+        </figure>
+        
+        
+        <div class="callout note">
+          <strong>Why this matters:</strong> Briefly tie to policy, planning, disaster risk reduction.
+        </div>
+      </section>
+
+      <!-- STUDY AREA -->
+      <section id="study-area">
+        <h2>Study Area</h2>
+        <figure class="figure img-limit-lg">
+          <img src="/Treasure Beach.jpg" alt="Treasure Beach AOI">
+          <figcaption>Treasure Beach AOI (red).</figcaption>
+        </figure>
+        <figure class="figure img-limit-lg">
+          <img src="/TreasureBeach.jpg" alt="Treasure Beach AOI">
+          <figcaption>Detected structures (green) within the AOI (red).</figcaption>
+        </figure>
+      </section>
+
+      <!-- DATA -->
+      <section id="data-resolution" aria-labelledby="data-resolution-title">
+        <h2>Data</h2>
+        <p>Used 2 different types of raster resolution 2cm and 10 cm, there were a total of 1,338 structures consisted in the raster, 
+          all of them manually digitized. </p>
+        <div class="compare">
+          <article class="res res-2cm">
+            <h3>2&nbsp;cm</h3>
+            <ul>
+              <li>Models produced better output (<strong>89% correctly mapped</strong>).</li>
+              <li>Higher false positives (<strong>56%</strong>).</li>
+              <li>Some models mistook <em>vehicles</em> and <em>boats</em> for structures.</li>
+            </ul>
+          </article>
+
+          <article class="res res-10cm">
+            <h3>10&nbsp;cm</h3>
+            <ul>
+              <li>Good output (<strong>82% correctly mapped</strong>).</li>
+              <li>Much fewer false positives (<strong>12%</strong>) compared to 2&nbsp;cm.</li>
+            </ul>
+          </article>
+        </div>
+
+  <p class="note">
+    We focused on the <strong>2&nbsp;cm</strong> raster because it’s easier to delete false positives than to manually map the remaining structures. 
+    False positives can be reduced significantly through <strong>custom‑trained models with a large number of epochs</strong>.
+  </p>
+</section>
+
+      <!-- METHODS -->
+      <section id="methods">
+        <h2>Methods</h2>
+
+        <h3 id="pipeline">Workflow overview</h3>
+        <figure class="figure img-limit-lg">
+          <img src="/Methods.png" alt="WorkFlow">
+          <figcaption>Work Flow</figcaption>
+        </figure>
+        <p> </p>
+
+        <h2>Pre-trained Models and Tools</h2>
+        <p>Initially tried using pre-trained models, the deep learning training datasets were obtained from <a href="https://livingatlas.arcgis.com/en/browse/?q=building" target="_blank" rel="noopener noreferrer">
+  <strong>ArcGIS Living Atlas</strong>
+</a>
+. Some of the models tested include:</p>
+        <ul>
+          <li><a href="https://www.arcgis.com/home/item.html?id=a6857359a1cd44839781a4f113cd5934"> Building Footprint Extraction – USA</a></li>
+          <li><a href="https://www.arcgis.com/home/item.html?id=4e38dec1577b4b7da5365294d8a66534">Building Footprint Extraction – Australia</a></li>
+          <li><a href="https://www.arcgis.com/home/item.html?id=63785ee9860d4bd68cd82caccdcf1742">Building Footprint Extraction – KSA</a></li>
+          <li><a href="https://www.arcgis.com/home/item.html?id=17e4bb1ffa4e49c9958be46c9f76f05f">Building Footprint Extraction – New Zealand</a></li>
+          <li><a href="https://www.arcgis.com/home/item.html?id=979cb0cf938946bfb8bb2f41cf9f9795">Building Footprint Extraction – Africa</a></li>
+          <li><a href="https://www.arcgis.com/home/item.html?id=fdfc8a925af740a5a4b01061a2d01d09">Building Footprint Extraction – China</a></li>
+        </ul>
+
+        <h3 id="modeling">Modeling</h3>
+        <p>Backbone Architecture: <strong>ResNet50</strong>, <strong>ResNet101</strong>, <strong>ResNet152</strong></p>
+        <p>Model Type: <strong>Mask R-CNN</strong></p>
+        <ul>
+          <li>Max Epochs: <strong>240</strong></li>
+          <li>Batch Size: <strong>4</strong></li>
+          <li>Chip Size: <strong>256</strong></li>
+        </ul>
+      <section id="overview-tools">
+  <h2 id="overview">1. Overview</h2>
+  <p>This study aims to automate the delineation of structures using deep learning tools available in ArcGIS Pro to support flood risk assessment in Treasure Beach, Jamaica. 
+    The primary tools utilized for object detection and feature extraction were <em>Detect Objects Using Deep Learning</em> and <em>Extract Features Using AI Models</em>. 
+    The model was trained using different training samples and executed using various parameter configurations to evaluate efficiency, completeness, and accuracy.</p>
+
+  <h2 id="tools">2. Tools Used for Structure Detection</h2>
+  <h3 id="extract-features">A. Extract Features Using AI Models (GeoAI Toolset)</h3>
+  <ul>
+    <strong>Purpose:</strong> <li>This tool, part of the GeoAI tools set, allows the execution of deep learning models to detect and extract features from drone imagery.</li>
+  <li>Unlike "Detect Objects Using Deep Learning," it provides a more straightforward execution process with fewer parameter optimization options.</li>
+  <li>Generates outputs that do not require additional post-processing to merge overlapping detections.</li><br>
+
+    <strong>Processing Approach:</strong> <li>Initially ran using Area of Interest (AOI) option, but processing time was extensive.</li>
+      <li>Switched to Clipped Raster to reduce computation time while maintaining accuracy.</li>
+      <li><strong>Mode:</strong> Set to <strong>Infer and Post Process</strong>, meaning that the model first makes predictions (Infer) and then refines the results in a post-processing step.</li>
+      <li><strong>Post-Processing Workflow:</strong> Applied Polygon Regularization to smooth and refine detected structure boundaries.</li>
+      <li><strong>Confidence Threshold:</strong> Set to 90%, ensuring only high-confidence detections are retained.</li>
+      <li><strong>GPU Processing:</strong> Utilized GPU acceleration to improve execution efficiency.</li><br>
+
+      <strong>Limitations:</strong> 
+       <li>Less efficient compared to <strong>"Detect Objects Using Deep Learning"</strong>.</li>
+       <li>Limited flexibility in parameter tuning, affecting optimization potential.</li>
+  </ul>
+
+  <h3 id="detect-objects">B. Detect Objects Using Deep Learning (Image Analyst Toolset)</h3>
+  <ul>
+    <strong>Purpose:</strong> 
+    <li>Part of the <strong>Image Analyst toolset</strong>, providing a more advanced execution framework with greater control over <strong>Tile size, padding, and Non-Maximum Suppression (NMS)</strong>.</li>
+    <li>Produces more accurate structure delineations compared to <strong>"Extract Features Using AI Models"</strong>.</li><br>
+
+    <strong>Processing Approach:</strong> 
+      <li>Initially focused on <strong>Area of Interest (AOI) </strong>option, but processing time was long.</li>
+      <li>Switched to Clipped Raster to enhance performance.</li>
+  </ul>
+  <p><strong>Key Considerations:</strong></p>
+<ul>
+  <li><strong>Without NMS:</strong> Produces more overlapping bounding boxes requiring post-processing using the <strong>Dissolve Boundaries</strong> tool.</li>
+  <li><strong>With NMS:</strong> Eliminates redundant bounding boxes, refining object delineation and reducing post-processing needs.</li>
+</ul>
+
+<p><strong>Objects of Interest Parameter:</strong></p>
+<ul>
+  <li>Specifies the object names to be detected, based on the <strong>Model Definition</strong> parameter.</li>
+  <li>This parameter is only active when the model detects more than one type of object.</li>
+  <li>When the model was trained with multiple classes, this parameter provided different options to select from various object types.</li>
+  <li>Available classes included <strong>Finished Buildings, Sheds, Unfinished Buildings, and Structures</strong>.</li>
+  <li>Due to the hybrid training strategy, different models provided <strong>three different options</strong> each time, selecting from the four available classes.</li>
+</ul>
+
+
+  <p>
+    Pretrained USA model downloaded from 
+    <a href="https://livingatlas.arcgis.com/en/browse/?q=building#d=2&type=tool&itemTypes=Deep+Learning+Package&q=building" target="_blank" rel="noopener noreferrer"><strong>ArcGIS Living Atlas</strong></a>,
+    Executed through <strong>Extract Features Using AI Models</strong>, Comparing with manually mapped set ,
+    Executed through <strong>Detect Objects Using Deep Learning</strong>, without <strong>Non-Maximum Suppression</strong>, resulting in overlapping boxes, which were later merged using dissolve boundaries tool.
+    <strong>Comparing</strong> with manually mapped set. Same model was executed through 2 different tools.
+  </p>
+
+  <!-- Images -->
+  <div class="gallery-2">
+    <figure class="figure img-limit-lg">
+      <img src="Manually mapped for comparision.jpg" alt="Top comparison image showing manually mapped delineations" />
+      <figcaption> Manually mapped outlines.</figcaption>
+    </figure>
+    <figure class="figure img-limit-lg">
+      <img src="EFUAI.jpg" alt="Bottom-left: Extract Features Using AI Models vs. manual mapping" />
+      <figcaption><strong>Extract Features Using AI Models</strong> </figcaption>
+    </figure></div>
+
+  <div class="gallery-2">
+    <figure class="figure img-limit-lg">
+      <img src="Manually mapped for comparision.jpg" alt="Top comparison image showing manually mapped delineations" />
+      <figcaption>Manually mapped outlines.</figcaption>
+    </figure>
+    <figure class="figure img-limit-lg">
+      <img src="DOUDL.jpg" alt="Bottom-right: Detect Objects Using Deep Learning without NMS vs. manual mapping" />
+      <figcaption> <strong>Detect Objects Using Deep Learning</strong> (no NMS) </figcaption>
+    </figure>
+  </div>
+
+  <h3 id="problems-2cm">Problems with 2cm Resolution Raster</h3>
+  <p>
+    Multiple small mappings of same structures same structure was mapped in small portions instead of a single chunk, 
+    making more entries into the attribute table, giving an incorrect count about the number of structures in the raster set. 
+    Custom trained models reduced these mistakes significantly.
+  </p>
+
+  <div class="gallery-2">
+     <figure class="figure img-limit-lg" >
+    <img src="small-chunk.jpg" alt="2cm raster problem 1">
+    <figcaption>Structures mapped in small chunks instead of a single continuous polygon.</figcaption></figure>
+    <figure class="figure img-limit-lg">
+    <img src="original chunk.jpg" alt="2cm raster problem 2">
+    </figure>
+  </div>
+
+  <h3>Mistook Boats and Vehicles for Buildings</h3>
+  <div class="gallery-2">
+    <figure class="figure img-limit-lg">
+    <img src="boat mistake.jpg" alt="Mistook boats as buildings">
+    <figcaption>Model mistook boats for Structures/Buildings.</figcaption></figure>
+    <figure class="figure img-limit-lg">
+    <img src="boat original.jpg" alt="Mistook vehicles as buildings">
+    </figure>
+  </div>
+
+  <h3>Poor representation of area, perimeter.</h3>
+  <div class="gallery-2">
+    <figure class="figure img-limit-lg">
+    <img src="poor perimeter.jpg" >
+    <figcaption>Model didn't accurately captured the area and perimeter of the structure.</figcaption></figure>
+    <figure class="figure img-limit-lg">
+    <img src="original perimeter.jpg" >
+    </figure>
+  </div>
+ 
+  <p>All problems were addressed using custom-trained models.</p>
+
+  <h3 id="parameters">Commonly Used Parameter Settings</h3>
+  <ul>
+    <li><strong>Padding (64):</strong> Determines the overlap between tiles during processing to ensure objects near tile edges are properly detected without being cut off.</li>
+    <li><strong>Batch Size (4):</strong> Controls the number of images processed simultaneously, balancing performance and memory usage.</li>
+    <li><strong>Threshold (0.9):</strong> Sets the minimum confidence score required for an object to be classified as a valid detection, filtering out lower-confidence detections.</li>
+    <li><strong>Return BBoxes (False):</strong> Specifies whether bounding boxes should be included in the output. Since object segmentation was prioritized, this was set to False.</li>
+    <li><strong>Test Time Augmentation (False):</strong> Prevents additional transformations such as flipping or scaling during inference, ensuring consistency in predictions.</li>
+    <li><strong>Merge Policy (Mean):</strong> Determines how overlapping detections from different tiles are merged, with "mean" averaging the predictions for improved accuracy.</li>
+    <li><strong>Tile Size (256):</strong> Defines the size of image tiles processed at a time, affecting detection granularity and computational efficiency.</li>
+    <li><strong>Parameters Not Frequently Used:</strong>
+      <ul>
+        <li><strong>NMS</strong></li>
+        <li><strong>Use Pixel Space:</strong> This parameter determines whether to use pixel-based coordinates instead of geographic coordinates for bounding boxes, affecting how objects are aligned and merged during detection.</li>
+      </ul>
+    </li>
+    <li><strong>Raster Analysis Settings:</strong>
+      <ul>
+        <li><strong>Parallel Processing Factor:</strong> 100%</li>
+        <li><strong>Cell Size:</strong> Set to Maximum of Inputs</li>
+        <li><strong>Processor Type:</strong> GPU</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2 id="training-data">3. Training Data & Samples</h2>
+  <h3 id="training-variations">A. Training Data Variations</h3>
+  <p>To improve detection accuracy, different datasets were created:</p>
+  <ul>
+    <li>
+      <p><strong>Multi-Class Training Data:</strong></p>
+      <ul>
+        <li>Classified into <strong>Finished Buildings, Sheds, and Unfinished Structures</strong>.</li>
+        <li>Helps distinguish different structure types but may introduce classification confusion.</li>
+      </ul>
+    </li>
+    <li>
+      <p><strong>Single-Class Training Data:</strong></p>
+      <ul>
+        <li>Treated all structures as a single category (<strong>"Structures"</strong>).</li>
+        <li>Achieved better accuracy by focusing purely on object detection rather than classification.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3 id="training-sample-size">B. Training Sample Size</h3>
+  <ul>
+    <li>Training datasets varied from <strong>20 to 163 samples</strong>, tested to assess the impact of dataset size on model accuracy.</li>
+    <li>Different pre-trained models from <strong>ArcGIS Living Atlas</strong> were used for comparative evaluation (e.g., USA, Australia, New Zealand models).</li>
+  </ul>
+
+  <h2 id="model-training">4. Model Training & Execution</h2>
+  <h3 id="dl-config">A. Deep Learning Model Configuration</h3>
+  <ul>
+    <li><strong>Backbone Architecture:</strong> ResNet-50, ResNet-101, ResNet-152</li>
+    <li><strong>Training Epochs:</strong> 20 vs. 120 Epochs tested</li>
+    <li><strong>Model Evaluation:</strong>
+      <ul>
+        <li><strong>Shorter training (20 epochs):</strong> Higher recall but more false positives.</li>
+        <li><strong>Longer training (120 epochs):</strong> Improved precision with fewer false positives but slight loss in recall.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3 id="param-optimization">B. Parameter Optimization & Execution</h3>
+  <h4>Tile and Padding Size</h4>
+  <ul>
+    <li><strong>Smaller Tiles (512px):</strong>
+      <ul>
+        <li>Provided finer object detection with better localization.</li>
+        <li>Increased overlapping bounding boxes when NMS was disabled.</li>
+      </ul>
+    </li>
+    <li><strong>Larger Tiles (1024px):</strong>
+      <ul>
+        <li>Captured broader regions but slightly reduced detection accuracy.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>Non-Maximum Suppression (NMS)</h4>
+<ul>
+<li><strong>Without NMS:</strong>
+<ul>
+<li>More detections but required post-processing via <strong>Dissolve Boundaries Tool</strong>.</li>
+</ul>
+</li>
+<li><strong>With NMS:</strong>
+<ul>
+<li>Reduced redundancy in overlapping bounding boxes.</li>
+<li>Ensured each structure was uniquely delineated, minimizing the need for post-processing.</li>
+</ul>
+</li>
+</ul>
+
+  <h2 id="validation">5. Post-Processing & Validation</h2>
+  <ul>
+    <li><strong>Dissolve Boundaries Tool:</strong> Used to merge overlapping boxes when NMS was disabled.</li>
+    <li><strong>Model Accuracy Testing:</strong>
+    <ul>
+    <li>Evaluated against manually labeled structures.</li>
+    <li>Compared results with <strong>random structures from Open Street Map</strong> to measure detection reliability.</li>
+    </ul>
+    </li>
+    </ul>
+
+
+
+<section id="random-structures">
+  <h2>Random Structures from Open Street View to assess the accuracy of the model.</h2>
+  <p>
+    To test the accuracy of the model, 100 random structures from open street view map (top) 
+    were selected to see whether the model mapped (bottom) those structures or not.
+  </p>
+  
+  <figure class="figure img-limit-lg">
+    <img src="random 1.jpg" 
+         alt="Random structures from Open Street View compared to model mapped results" 
+         style="max-width: 1200px; height: auto;">
+    <figcaption>
+      Comparison of random Open Street View structures (top) with model-mapped structures (bottom).
+    </figcaption></figure>
+    <figure class="figure img-limit-lg">
+    <img src="random 2.jpg" 
+         alt="Random structures from Open Street View compared to model mapped results" 
+         style="max-width: 1500px; height: auto;">
+  </figure>
+</section>
+
+
+    <!-- RESULTS -->
+  <section id="results">
+    <h2>Results</h2>
+    <p>
+    This graph compares the completeness of the AI/ML mapped structures between our training data set for 
+    Treasure Beach (left) versus the publicly available models we obtained that were trained for various 
+    geographic areas. The bottom graph compares the results of different combinations of tool parameters 
+    that vary the Pad, Tile, and NMS.
+  </p>
+  <figure class="figure img-limit-lg">
+    <img src="atlas2.jpg" 
+         alt="Summary of model performance" >
+    <figcaption style="text-align:center; margin-top:8px;">
+      Summary of Model Performance downloaded from Atlas vs Custom Trained Model TB.
+    </figcaption>
+  </figure>
+  <figure class="figure img-limit-lg">
+    <img src="parameters2.jpg" 
+         alt="Summary of model performance" >
+    <figcaption style="text-align:center; margin-top:8px;">
+      Tuning of different parameters.
+    </figcaption>
+  </figure>
+  <figure class="figure img-limit-lg">
+    <img src="top5 trials1.jpg" 
+         alt="Summary of model performance" >
+    <figcaption style="text-align:center; margin-top:8px;">
+      Top 5 trials over AOI(Clipped Raster).
+    </figcaption>
+  </figure>
+  <figure class="figure img-limit-lg">
+    <img src="top5 trials2.jpg" 
+         alt="Summary of model performance" >
+    <figcaption style="text-align:center; margin-top:8px;">
+      Top 5 trials over AOI(Clipped Raster).
+    </figcaption>
+  </figure>
+  <figure class="figure img-limit-lg">
+    <img src="completer raster1.jpg" 
+         alt="Summary of model performance" >
+    <figcaption style="text-align:center; margin-top:8px;">
+      Top 3 trials over Complete Raster.
+    </figcaption>
+  </figure>
+<figure class="figure img-limit-lg">
+    <img src="complete raster2.jpg" 
+         alt="Summary of model performance" >
+    <figcaption style="text-align:center; margin-top:8px;">
+      Top 3 trials over Complete Raster.
+    </figcaption>
+  </figure>
+      </section>
+
+ <section id="model-performance">
+  <h2>Summary of Model Performance (Clipped Raster Execution)</h2>
+  <p>
+    Five deep learning models (labeled A through E) were executed using clipped raster inputs to evaluate 
+    structure detection performance. Each model was trained using a combination of different class 
+    configurations and training samples.
+  </p>
+  <p>
+    All models were assessed based on the percentage of actual ground-truth structures identified. 
+    Model C achieved the highest detection rate at 89.37%, followed by Model A at 88.41%. Models B, D, and E 
+    demonstrated slightly lower but still competitive accuracy levels, ranging from approximately 85% to 87%.
+  </p>
+  <ul>
+    <li><strong>Model A:</strong> From 14th trial, trained for 240 epochs, model was trained with 135 image samples, consists of only one class – “Structures”.</li>
+    <li><strong>Model B:</strong> From 18th trial, trained for 120 epochs, model was trained with 163 image samples, consists of only one class – “Structures” and 50 samples of 3 classes “Finished Buildings”, “Sheds”, “Unfinished Structures”.</li>
+    <li><strong>Model C:</strong> Training data and classes same as model B but trained only for 20 epochs.</li>
+    <li><strong>Model D:</strong> From 18th trial, trained for 120 epochs, 50(2cm), 57(10cm) Samples of 3 classes 163, 105(10cm), 33 Samples(2cm) of Structures (1class).</li>
+    <li><strong>Model E:</strong> Training data and classes same as model D but trained only for 20 epochs. All models were configured with a tile size of 256 and padding of 64.</li>
+  </ul>
+  <p>
+    Each model used the ResNet-152 backbone architecture, known for its deep residual learning and strong 
+    performance in object detection tasks. Most of the training samples are from 2cm resolution raster. 
+    All Models were executed 2cm resolution raster. Detect Objects Using Deep Learning was used for all runs 
+    with GPU acceleration, clipped raster inputs, and optimized settings. The use of clipped raster helped 
+    reduce processing time while maintaining high detection accuracy. Overall, the comparative results 
+    demonstrate how model architecture, training class strategy, number of epochs, and parameter tuning 
+    impact structure detection outcomes in AI-assisted mapping workflows.
+  </p>
+  
+</section>
+
+<section id="conclusion">
+  <h2 id="conclusion">6. Conclusion</h2>
+  <ul>
+    <li><strong>Detect Objects Using Deep Learning</strong> produced more optimized outputs compared to <strong>Extract Features Using AI Models</strong>, especially when used with NMS.</li>
+    <li>Training with <strong>single-class</strong> data resulted in better accuracy compared to multi-class datasets.</li>
+    <li><strong>Parameter tuning</strong> (tile size, padding, and NMS) played a crucial role in refining structure delineations.</li>
+    <li><strong>Longer training</strong> improved precision but required balancing recall to avoid missing structures.</li>
+    </ul>
+  <p>This methodology provides a structured approach to AI-based structure mapping, improving flood risk assessment through automation and optimization.</p>
+</section>
+<section id="optimal-approach">
+  <h2>Optimal Approach to Delineating Structures</h2>
+  <p>
+    The optimal solution for delineating structures in the Full AOI was using a 2 cm resolution image and 
+    DOUDL tool. The optimal parameters included a <strong>Tile Size</strong> of 256, <strong>Padding</strong> of 64, 
+    and a <strong>Confidence Threshold</strong> of 0.90 (90%). The model was trained using the 
+    <strong>ResNet-152</strong> architecture with a single class labeled <strong>‘Structures’</strong>, 
+    as multi-class training introduced confusion and reduced model performance. 
+    Other key settings included a <strong>Batch Size</strong> of 4, 
+    <strong>Non-Maximum Suppression (NMS)</strong> disabled, <strong>GPU</strong> processing, 
+    and <strong>Cell Size</strong> set to ‘Maximum of Inputs’.
+  </p>
+</section>
+
+<section id="future-ideas">
+  <h2>Future Ideas</h2>
+  <p>
+    <strong>Future plans</strong> include enhancing the model's classification capabilities by introducing 
+    more distinct object categories beyond structures. These may include vehicles, boats, roads, and vegetation, 
+    alongside existing categories such as Finished Buildings, Sheds, and Unfinished Structures. 
+    This would allow the model to better distinguish between man-made and natural features in complex imagery.
+  </p>
+  <p>
+    Additionally, training new models with a higher number of epochs and larger, more diverse datasets is 
+    anticipated to reduce false positives and improve overall model robustness.
+  </p>
+  <p>
+    Exploration of alternative machine learning algorithms—such as decision trees and random forest classifiers— 
+    may also be undertaken to assess their effectiveness in supplementing or refining deep learning outputs, 
+    particularly in post-processing and classification tasks. This demonstrates how model architecture, 
+    training class strategy, number of epochs, and parameter tuning impact structure detection outcomes 
+    in AI-assisted mapping workflows.
+  </p>
+</section>
+      <!-- ACK / REFERENCES -->
+      <section id="acknowledgments">
+        <h2>Acknowledgments</h2>
+        <p><!-- Funding, advisors, collaborators, data providers. --></p>
+      </section>
+
+      <section id="references">
+        <h2>References</h2>
+        <p>
+    <strong>He, K., Zhang, X., Ren, S., & Sun, J. (2016).</strong> 
+    Deep residual learning for image recognition. 
+    <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em>, 770–778.
+    <br>
+    <em>(For ResNet-152)</em>
+  </p></section>
+
+    
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Your Name. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Dark mode toggle
+    const toggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    toggle.addEventListener('click', () => {
+      const mode = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', mode);
+      localStorage.setItem('theme', mode);
+    });
+    // Persist theme
+    const saved = localStorage.getItem('theme');
+    if (saved) root.setAttribute('data-theme', saved);
+
+    // Build TOC from h2/h3
+    const tocList = document.getElementById('tocList');
+    const headings = document.querySelectorAll('.post h2, .post h3');
+    const tocFrag = document.createDocumentFragment();
+    headings.forEach(h => {
+      if (!h.id) {
+        h.id = h.textContent.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+      }
+      // Add anchor link on heading
+      const link = document.createElement('a');
+      link.href = '#' + h.id;
+      link.className = 'anchor';
+      link.title = 'Copy link to section';
+      link.textContent = '¶';
+      h.appendChild(link);
+
+      // TOC entry
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent.replace('¶','').trim();
+      a.className = h.tagName.toLowerCase() === 'h2' ? 'toc--h2' : 'toc--h3';
+      tocFrag.appendChild(a);
+    });
+    tocList.appendChild(tocFrag);
+
+    // Smooth scrolling (native in most browsers via CSS; enhance for older)
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({behavior: 'smooth', block: 'start'});
+          history.pushState(null, '', a.getAttribute('href'));
+        }
+      });
+    });
+
+    // Scrollspy: highlight active TOC link
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('#tocList a').forEach(t => t.classList.remove('active'));
+          const current = document.querySelector(`#tocList a[href="#${entry.target.id}"]`);
+          if (current) current.classList.add('active');
+        }
+      });
+    }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+    document.querySelectorAll('.post h2, .post h3').forEach(h => observer.observe(h));
+  </script>
+</body>
+</html>

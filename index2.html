@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI-Driven Automated Structure Mapping for Flood Risk Assessment</title>
+  <style>body{font-family:system-ui,Arial,sans-serif;line-height:1.6;margin:0;padding:0;background:#f9f9f9;color:#222}header,footer{background:#222;color:#fff;padding:1rem;text-align:center}main{max-width:900px;margin:2rem auto;padding:2rem;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,0.1)}h1,h2,h3{color:#333}h2{margin-top:2rem;border-bottom:2px solid #eee;padding-bottom:.25rem}section{margin-bottom:2rem}nav{position:fixed;top:0;right:0;width:250px;height:100%;overflow:auto;background:#f0f0f0;padding:1rem;box-shadow:-2px 0 5px rgba(0,0,0,0.1)}nav a{display:block;margin:.5rem 0;color:#333;text-decoration:none}nav a:hover{color:#007acc}</style>
+</head>
+<body>
+<header>
+  <h1>AI-Driven Automated Structure Mapping for Flood Risk Assessment in Treasure Beach, Jamaica</h1>
+  <p>Research by Purna Ganji and Toby Dogwiler</p>
+</header>
+
+<main>
+  <section id="abstract">
+    <h2>Abstract</h2>
+    <p>This study explores the application of deep learning in ArcGIS Pro to automate the delineation of structures in Treasure Beach, Jamaica, as part of a flood risk assessment. Drone imagery was analyzed using two tools: Extract Features Using AI Models and Detect Objects Using Deep Learning. The latter tool provided better performance and allowed for more advanced parameter tuning. A hybrid model training approach was adopted using both single-class and multi-class data. Optimized parameters included a tile size of 256 and padding of 64. Among five tested models, the most accurate one detected 89.37% of actual structures while reducing false positives and false negatives. Issues such as object misclassification and over-segmentation were addressed using post-processing steps like the Dissolve Boundaries tool. Overall, the study demonstrates that deep learning can significantly improve the efficiency and accuracy of structure mapping in support of flood preparedness efforts. Drone imagery was acquired in June 2024 at Treasure Beach, Jamaica for the purpose of mapping flood risk in this community on the southern coast of Jamaica. As part of quantifying flood risk there is a need to digitize and map all the structures in the field area. Our goal was to automate the process of digitizing the structures using AI and Deep Learning tools available in ArcGIS Pro. Specifically, we investigated how to optimize various parameters in these tools to maximize the number of correctly identified structures and how accurately the perimeter of structures was mapped.</p>
+  </section>
+
+  <section id="background">
+    <h2>Background</h2>
+    <p>The area of interest was outlined in red, 207 structures were mapped manually for comparison. This research addresses a subsidiary question of how to efficiently delineate all structures within the Treasure Beach community (i.e., all the structures captured on the drone imagery), which is necessary to assess the risk posed to each structure by flooding. Our primary goal in this project was to evaluate the completeness and accuracy of AI/ML tools in automating delineation and to optimize those tools to maximize completeness and accuracy.</p>
+  </section>
+
+  <section id="methods">
+    <h2>Methods</h2>
+    <p>Two raster resolutions (2cm and 10cm) were tested, covering a total of 1,338 manually digitized structures. Models with 2cm imagery produced higher detection (89%) but more false positives (56%), while 10cm imagery had fewer false positives (12%) but lower detection (82%). We decided to focus on the 2cm raster since false positives could be deleted more easily than manually mapping missed structures. Custom trained models with larger epochs reduced these issues significantly.</p>
+    <p>The two main ArcGIS Pro tools used were <em>Extract Features Using AI Models</em> and <em>Detect Objects Using Deep Learning</em>. Pre-trained models from ArcGIS Living Atlas (USA, Australia, KSA, New Zealand, Africa, China) were tested alongside custom training. The Detect Objects tool provided greater control with parameters like tile size, padding, Non-Maximum Suppression (NMS), and GPU acceleration. Extract Features Using AI Models provided simpler workflows but limited optimization.</p>
+    <h3>Training Data</h3>
+    <p>Both multi-class datasets (Finished Buildings, Sheds, Unfinished Structures) and single-class datasets (all as “Structures”) were used. Single-class training gave better accuracy. Training sets ranged from 20 to 163 samples. Backbone architectures included ResNet-50, ResNet-101, and ResNet-152, with epochs ranging from 20 to 240. Longer training improved precision but reduced recall slightly.</p>
+    <h3>Post-Processing</h3>
+    <p>Dissolve Boundaries was used to merge overlapping detections when NMS was off. Validation was performed against manually mapped structures and 100 random samples from OpenStreetMap. Problems like over-segmentation, false positives (boats, vehicles), and perimeter errors were mitigated by custom trained models.</p>
+  </section>
+
+  <section id="results">
+    <h2>Results</h2>
+    <p>Detect Objects Using Deep Learning produced more optimized results than Extract Features Using AI Models, especially with NMS enabled. Single-class training was more accurate than multi-class labeling. Longer training improved precision but sometimes reduced recall.</p>
+    <p>Five models (A–E) were compared. Model C (20 epochs, same data as Model B) achieved the highest detection (89.37%). Model A (240 epochs, 135 samples, single class) achieved 88.41%. Other models ranged from 85% to 87%. All used ResNet-152 with tile size 256 and padding 64. Most training was performed on 2cm resolution rasters. Clipped raster inputs significantly reduced processing time.</p>
+    <p>Testing with 100 random structures from OpenStreetMap showed detection accuracies between 81% and 92%, depending on configuration. The best trial (Trial 14) achieved 92% detection.</p>
+  </section>
+
+  <section id="conclusion">
+    <h2>Conclusion</h2>
+    <p>Automated structure mapping with AI in ArcGIS Pro is a viable approach for flood risk assessment. Detect Objects Using Deep Learning was the most effective tool, with single-class training outperforming multi-class approaches. Parameter tuning (tile size, padding, NMS) was critical. Longer training improved precision but required balancing recall. Post-processing like Dissolve Boundaries improved outputs, and clipped raster inputs reduced runtime.</p>
+    <p>Ultimately, this project confirms that high-resolution drone imagery combined with well-trained AI models and optimized parameters can produce reliable automated structure maps. This enables faster and more effective flood vulnerability assessments, improving planning and response strategies for vulnerable communities like Treasure Beach, Jamaica.</p>
+  </section>
+</main>
+
+<footer>
+  <p>© 2025 Purna Ganji. All rights reserved.</p>
+</footer>
+</body>
+</html>
